@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 	}
 }
 // Crear un nuevo post
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
+if (($_SERVER['REQUEST_METHOD'] == 'POST') AND (!empty($_POST['name_user'])))
 {
     
     //lo recibe por parametros
