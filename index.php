@@ -45,12 +45,17 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST') AND (!empty($_POST['name_user'])))
     //recibe por json
     //$data = file_get_contents('php://input');
     //$input = json_decode($data);
+
+    //haseo password
+    $passwd = password_hash($_POST['password_user'], PASSWORD_DEFAULT);
+
+
     
     $sql = "INSERT INTO users (name_user, email_user, password_user, image_user, description_user) 
     VALUES (:name_user, :email_user, :password_user, :image_user, :description_user)";
     $statement = $dbConn->prepare($sql);
     bindAllValues($statement, $input);
-    $statement->execute();
+    $statement->execute(array(":name_user"=>$_POST['name_user'],":email_user"=>$_POST['email_user'],":password_user"=>$passwd,":image_user"=>$_POST['image_user'],":description_user"=>$_POST['description_user']));
     $postId = $dbConn->lastInsertId();
     if($postId)
     {
