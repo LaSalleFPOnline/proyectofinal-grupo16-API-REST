@@ -22,9 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
   //recibe por json
   $data = file_get_contents('php://input');
   $input = json_decode($data);
-  $_POST['usernameEmail'] = $input->email;
-  $_POST['userPassword'] = $input->passd;
+  //$input->nombre = "victor";
+  //$input->apellido = "rodriguez";
 
+  //$email = $_POST['usernameEmail'];
+  //$passd = $_POST['userPassword'];
+  $_POST['usernameEmail'] = $input->nombre;
+  $_POST['userPassword'] = $input->apellido;
   $email = $_POST['usernameEmail'];
   $passd = $_POST['userPassword'];
 
@@ -45,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       //header('Location: dashboard.php');
       
       
-      echo "existe el usuario";
+      //echo "existe el usuario";
 
       
 
@@ -64,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           setcookie("usuario", $idUsuario, time()+600);
 
           //$id_usuario = 34;
-          echo $_SESSION['id_user'];
-          echo $_SESSION['email'];
+          //echo $_SESSION['id_user'];
+          //echo $_SESSION['email'];
           //header('Location: http://localhost/apibici/getallusers.php');
           //header('Location: http://localhost:4200/perfil/34');
 
@@ -76,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
           echo json_encode(  $sql->fetch(PDO::FETCH_ASSOC)  );
           exit();
       } else {
-          echo 'La contraseña no es válida.';
+          //echo 'La contraseña no es válida.';
       }
       //echo "<br>".$passwdhash;
       //echo "<br>".$passd;

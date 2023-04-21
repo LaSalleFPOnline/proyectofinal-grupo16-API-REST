@@ -11,6 +11,9 @@ $username = "root";
 $password = "";
 $dbname = "biciquedadasbbdd";
 
+
+
+
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     // Establecer el modo de error a excepción
@@ -19,11 +22,37 @@ try {
 } catch(PDOException $e) {
     echo "Conexión fallida: " . $e->getMessage();
 }
-
+session_start();
 // Verificar si el usuario existe en la tabla users
 //$email = $_POST['email'];
 //$password = $_POST['password'];
-if (($_SERVER['REQUEST_METHOD'] == 'POST')){
+/*
+if(session_status()==2){
+    echo "activo";
+    //Mostrar un post
+    $sql = $conn->prepare("SELECT * FROM users where id_user=:id_user");
+    $sql->bindValue(':id_user', $_SESSION['id_user']);
+    $sql->execute();
+    header("HTTP/1.1 200 OK");
+    echo json_encode(  $sql->fetch(PDO::FETCH_ASSOC)  );
+    exit();
+}
+*/
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET')
+{
+    
+      //Mostrar un post
+      $sql = $conn->prepare("SELECT * FROM users where id_user=:id_user");
+      $sql->bindValue(':id_user', $_SESSION['id_user']);
+      $sql->execute();
+      header("HTTP/1.1 200 OK");
+      echo json_encode(  $sql->fetch(PDO::FETCH_ASSOC)  );
+      exit();
+    
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
     $email = $_POST['usernameEmail'];
@@ -40,7 +69,7 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST')){
 
     if ($stmt->rowCount() == 1) {
         // Si el usuario existe, guardar la información en una sesión
-        session_start();
+        
         $_SESSION['email'] = $email;
         //$_SESSION['password'] = $password;
         //header('Location: dashboard.php');
@@ -58,6 +87,7 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST')){
 
         if (password_verify($passd, $passwdhash)) {
             echo '¡La contraseña es válida!';
+            //header('Location: http://localhost:4200/perfil');
         } else {
             echo 'La contraseña no es válida.';
         }
@@ -73,4 +103,6 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST')){
 
     $conn = null;
 }
+
+
 ?>
