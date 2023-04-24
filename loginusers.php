@@ -53,6 +53,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+    //recibe por json
+    $data = file_get_contents('php://input');
+    $input = json_decode($data);
+    //$input->nombre = "victor";
+    //$input->apellido = "rodriguez";
+    
+
+    $sql = $dbConn->prepare("SELECT * FROM users where email_user=:email_user AND password_user=:password_user");
+    $sql->bindValue(':email_user', $input->email );
+    $sql->bindValue(':password_user', $input->passd );
+    $sql->execute();
+
+
+    if ($sql->rowCount() == 1) {
+
+        // Obtener el ID del usuario y guardarlo en la sesión
+        //$userUno = $sql->fetch(PDO::FETCH_ASSOC);
+        
+        $_SESSION['email'] = $input->email;
+
+        header("HTTP/1.1 200 OK");
+        echo json_encode(  $sql->fetch(PDO::FETCH_ASSOC)  );
+    }
+
+
+    
+
+    //echo json_encode($input);
+}
+
+
+/*
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
     $email = $_POST['usernameEmail'];
@@ -64,14 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $sql = "SELECT * FROM users WHERE email_user = :email ";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':email', $email);
-    //$stmt->bindParam(':password', $password);
+    $stmt->bindParam(':password', $password);
     $stmt->execute();
 
     if ($stmt->rowCount() == 1) {
         // Si el usuario existe, guardar la información en una sesión
         
         $_SESSION['email'] = $email;
-        //$_SESSION['password'] = $password;
+        $_SESSION['password'] = $password;
         //header('Location: dashboard.php');
         
         
@@ -103,6 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $conn = null;
 }
-
+*/
 
 ?>
