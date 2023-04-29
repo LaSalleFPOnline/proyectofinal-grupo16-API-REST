@@ -37,6 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $stmt->bindValue(':data_hangout', $data->data_hangout);
     $stmt->bindValue(':hour_hangout', $data->hour_hangout);
     $stmt->bindValue(':difficult_hangout', $data->difficult_hangout);
+
+
+    //guardo id de user para luego crear en el targeted
+    $id_use = $data->id_use;
     
     if ($stmt->execute()) {
         // Return success message
@@ -46,5 +50,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         echo json_encode(array('message' => 'Data insertion failed'));
     }
     
+
+
+    //consulta para la ultima quedada
+
+    $sql = $dbConn->prepare("SELECT * FROM hangouts ORDER BY id_hangout DESC LIMIT 1");
+    //$sql->bindValue(':id_user', $_SESSION['id_user']);
+    $sql->execute();
+
+    $hang = $sql->fetch(PDO::FETCH_ASSOC);
+    $id_hang = $hang['id_hangout'];
+    header("HTTP/1.1 200 OK");
+    //echo json_encode( $sql->fetch(PDO::FETCH_ASSOC) );
+
+    //Falta pasarle el id de usuario
+    // falta crear el targeted
+    $sql = "INSERT INTO targeted (id_user, id_hangout) VALUES (:id_user, :id_hangout)";
+    $stmt = $dbConn->prepare($sql);
+    $stmt->bindValue(':id_user', $id_use);
+    $stmt->bindValue(':id_hangout', $id_hang);
+    $stmt->execute();
 }
 ?>
