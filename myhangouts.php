@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
       //Mostrar un post
       
-      $sql = $dbConn->prepare("SELECT title_hangout, image_hangout, description_hangout FROM hangouts
+      $sql = $dbConn->prepare("SELECT * FROM hangouts
       INNER JOIN targeted ON hangouts.id_hangout = targeted.id_hangout
       WHERE id_user=:id_user");
       //$sql = $dbConn->prepare("SELECT * FROM hangouts where id_hangout=:id_hangout");
@@ -29,5 +29,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
       echo json_encode(  $sql->fetchAll()  );
       exit();
 	}
+}
+
+//Borrar
+if ($_SERVER['REQUEST_METHOD'] == 'DELETE')
+{
+	$id = $_GET['id_hangout'];
+  //$statement = $dbConn->prepare("DELETE FROM hangouts where id_hangout=:id_hangout");
+  $statement = $dbConn->prepare("DELETE FROM targeted where id_hangout=:id_hangout");
+  $statement->bindValue(':id_hangout', $id);
+  $statement->execute();
+	header("HTTP/1.1 200 OK");
+
+  $statement = $dbConn->prepare("DELETE FROM hangouts where id_hangout=:id_hangout");
+  $statement->bindValue(':id_hangout', $id);
+  $statement->execute();
+	exit();
 }
 ?>
