@@ -29,6 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
       echo json_encode(  $sql->fetchAll()  );
       exit();
 	}
+
+  if (isset($_GET['id_quedada']))
+    {
+      //Mostrar un post
+      
+      $sql = $dbConn->prepare("SELECT * FROM hangouts 
+      WHERE id_hangout=:id_hangout");
+      //$sql = $dbConn->prepare("SELECT * FROM hangouts where id_hangout=:id_hangout");
+      $sql->bindValue(':id_hangout', $_GET['id_quedada']);
+      $sql->execute();
+      header("HTTP/1.1 200 OK");
+      echo json_encode(  $sql->fetch(PDO::FETCH_ASSOC) );
+      exit();
+	}
 }
 
 //Borrar
