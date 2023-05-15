@@ -66,10 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT')
     $datos = file_get_contents('php://input');
     $input = json_decode($datos);
 
+    $passwd = password_hash($input->password_user, PASSWORD_DEFAULT);
+
     $data = [
         'name_user' => $input->name_user,
         'email_user' => $input->email_user,
-        'password_user' => $input->password_user,
+        'password_user' => $passwd,
         'image_user' => $input->image_user,
         'description_user' => $input->description_user
     ];
@@ -77,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT')
     $stmt= $dbConn->prepare($sql);
     $stmt->execute($data);
     header("HTTP/1.1 200 OK");
+    echo json_encode("actualizado");
     exit();
 }
 
